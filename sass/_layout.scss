@@ -1,5 +1,13 @@
 @import 'colors';
 
 body {
-	background-color: $red;
+	background-color: $body-color;
+}
+
+nav {
+	background-color: $nav-color;
+}
+
+.spy-glass, .search-field {
+	display: inline;
 }
