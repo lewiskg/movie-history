@@ -1,2 +1,8 @@
 body {
-  background-color: red; }
+  background-color: gray; }
+
+nav {
+  background-color: lightpink; }
+
+.spy-glass, .search-field {
+  display: inline; }
