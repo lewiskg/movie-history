@@ -4,5 +4,5 @@ body {
 nav {
   background-color: lightpink; }
 
-.spy-glass, .search-field {
-  display: inline; }
+#input-search, #movies {
+  margin: 10px auto; }
