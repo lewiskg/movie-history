@@ -30,8 +30,6 @@ module.exports = {retrieveKeys};
 },{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
-
-
 const domString = (movieArray, imgConfig) => {
 	let domStrang = "";
 	// console.log(movieArray);

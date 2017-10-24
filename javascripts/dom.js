@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 const domString = (movieArray, imgConfig) => {
 	let domStrang = "";
 	// console.log(movieArray);
