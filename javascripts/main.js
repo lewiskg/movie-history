@@ -25,5 +25,6 @@ let events = require('./events');
 let apiKeys = require('./apiKeys');
 
 apiKeys.retrieveKeys();
-events();
+events.myLinks();
+events.pressEnter();
 

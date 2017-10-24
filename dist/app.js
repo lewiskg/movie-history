@@ -2,6 +2,7 @@
 "use strict";
 
 const tmdb = require('./tmdb');
+const firebaseApi = require('./firebaseApi');
 
 const apiKeys = () => {
 
@@ -17,17 +18,21 @@ const apiKeys = () => {
 const retrieveKeys = () => {
 	apiKeys().then((results) => {
 		tmdb.setKey(results.tmdb.apiKey);
+		firebaseApi.setKey(results.firebaseKeys);
+		firebase.initializeApp(results.firebaseKeys);
+		// console.log("firebase apps?", firebase.apps);
 	}).catch((error) => {
 		console.log("error in retrieve keys", error);
 	});
 };
 
 module.exports = {retrieveKeys};
-},{"./tmdb":5}],2:[function(require,module,exports){
+},{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
 const domString = (movieArray, imgConfig) => {
 	let domStrang = "";
+	// console.log(movieArray);
 	for (let i = 0; i < movieArray.length; i++) {
 		if (i % 3 === 0) {
 			domStrang += `<div class="row">`;
@@ -69,16 +74,44 @@ const tmdb = require('./tmdb');
 const pressEnter = () => {
 	$(document).keypress((e) => {
 		if (e.key === 'Enter') {
-			let searchText = $('#searchBar').val();
+			let searchText = $('#searchBar').val(); console.log(searchText);
 			let query = searchText.replace(/\s/g,"%20");
 			tmdb.searchMovies(query);
 		}
 	});
-
 };
 
-module.exports = pressEnter;
-},{"./tmdb":5}],4:[function(require,module,exports){
+const myLinks = () => {
+	$(document).on('click', function(e) {
+		let idLink = e.target.id;
+		if(idLink === 'search-link') {
+			$('#input-search').removeClass('hide');
+			$('#myMovies').addClass('hide');
+			$('#authScreen').addClass('hide');
+		} else if(idLink ==='mymovies-link') {
+			$('#input-search').addClass('hide');
+			$('#myMovies').removeClass('hide');
+			$('#authScreen').addClass('hide');
+		} else if (idLink === 'auth-link') {
+			$('#input-search').addClass('hide');
+			$('#myMovies').addClass('hide');
+			$('#authScreen').removeClass('hide');
+		}
+	});
+};
+
+module.exports = {pressEnter, myLinks};
+},{"./tmdb":6}],4:[function(require,module,exports){
+"use strict";
+
+let firebaseKey = "";
+
+const setKey = (key) => {
+	firebaseKey = key;
+};
+
+module.exports = {setKey};
+},{}],5:[function(require,module,exports){
 "use strict";
 
 let dom = require('./dom');
@@ -106,10 +139,11 @@ let events = require('./events');
 let apiKeys = require('./apiKeys');
 
 apiKeys.retrieveKeys();
-events();
+events.myLinks();
+events.pressEnter();
 
 
-},{"./apiKeys":1,"./dom":2,"./events":3}],5:[function(require,module,exports){
+},{"./apiKeys":1,"./dom":2,"./events":3}],6:[function(require,module,exports){
 "use strict";
 
 const dom = require('./dom');
@@ -117,6 +151,7 @@ const dom = require('./dom');
 
 let tmdbKey;
 let imgConfig;
+
 
 const searchTMDB = (query) => {
 	return new Promise((resolve, reject) => {
@@ -129,25 +164,26 @@ const searchTMDB = (query) => {
 };
 
 const tmdbConfiguration = () => {
-	return new Promise((resolve,reject) => {
-		$.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
-			resolve(data.images);
-		}).fail((error) => {
-			reject(error);
-		});
-	});
+  return new Promise((resolve, reject) => {
+    $.ajax(`https://api.themoviedb.org/3/configuration?api_key=${tmdbKey}`).done((data) => {
+      resolve(data.images);
+    }).fail((error) => {
+      reject(error);
+    });
+  });
 };
 
 const getConfig = () => {
-	tmdbConfiguration().then((results) => {
-		imgConfig = results;
-		console.log(imgConfig);
-	}).catch((error) => {
-		console.log("Error in getConfig", error);
-	});
+  tmdbConfiguration().then((results) => {
+    imgConfig = results;
+    console.log(imgConfig);
+  }).catch((error) => {
+    console.log("Error in getConfig", error);
+  });
 };
 
 const searchMovies = (query) => {
+	// console.log("firebase apps?", firebase.apps);
 	searchTMDB(query).then((data) => {
 		showResults(data);
 	}).catch((error) => {
@@ -167,4 +203,4 @@ const showResults = (movieArray) => {
 };
 
 module.exports = {setKey, searchMovies};
-},{"./dom":2}]},{},[4]);
+},{"./dom":2}]},{},[5]);

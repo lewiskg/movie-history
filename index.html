@@ -13,9 +13,9 @@
 	    	</div>
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav navbar-right">	
-		        <li><a href="#">Authentication</a></li>
-		        <li><a href="#">My Movies</a></li>
-		        <li><a href="#">Search</a></li>
+		        <li><a id="auth-link" href="#">Authentication</a></li>
+		        <li><a id="mymovies-link" href="#">My Movies</a></li>
+		        <li><a id="search-link" href="#">Search</a></li>
 		  	  </ul>
 		    </div><!-- /.navbar-collapse -->
 	  	</div><!-- /.container-fluid -->
@@ -30,16 +30,26 @@
           		  <input type="text" class="form-control" placeholder="Search">
         	</div>
       	</div> -->
-
-      	<div id="input-search" class="input-group col-xs-6 col-xs-offset-3">
-      	  	<span class="input-group-addon glyphicon glyphicon-search"></span>
-  			<input id="searchBar" type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
-		</div>
+      	<div id="authScreen" class="text-center">
+      		<h1>Sign In</h1>
+      		<button class="btn btn-lg btn-default" id="googleButton">
+      			<img src="./images/google.png">
+      		</button>
+      	</div>
+	      <div id="input-search" class="input-group col-xs-6 col-xs-offset-3">
+	      	  <span class="input-group-addon glyphicon glyphicon-search"></span>
+	  			  <input id="searchBar" type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon1">
+		    </div>
+        <div id="myMovies" class="text-center">
+      		<h1>My Movies</h1>
+      	</div>
 
     	<div id="movies" class="container"></div>
 
-	</main>
 
+	</main>
+<script src="https://www.gstatic.com/firebasejs/4.5.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
 <script src="./lib/node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="./dist/app.js"></script>
 </body>
