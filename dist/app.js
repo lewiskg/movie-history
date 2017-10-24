@@ -5,7 +5,6 @@ const tmdb = require('./tmdb');
 const firebaseApi = require('./firebaseApi');
 
 const apiKeys = () => {
-
 	return new Promise((resolve, reject) => {
 		$.ajax('./db/apiKeys.json').done((data) => {
 			resolve(data.apiKeys);
@@ -30,7 +29,7 @@ module.exports = {retrieveKeys};
 },{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
-const domString = (movieArray, imgConfig) => {
+const domString = (movieArray, imgConfig, divName) => { 
 	let domStrang = "";
 	// console.log(movieArray);
 	for (let i = 0; i < movieArray.length; i++) {
@@ -51,18 +50,16 @@ const domString = (movieArray, imgConfig) => {
 			domStrang += `</div>`;
 		}
 	}
-	printToDom(domStrang);
+	printToDom(domStrang, divName);
 };
 
-
-const printToDom = (strang) => {
-	$("#movies").append(strang);
-
-};
-
-const clearDom = () => {
-	$("#movies").empty("");
+const printToDom = (strang, divName) => {
+	$(`#${divName}`).append(strang);
 	$("#searchBar").val("");
+};
+
+const clearDom = (divName) => {
+	$(`#${divName}`).empty("");
 };
 
 module.exports = {domString, clearDom};
@@ -71,11 +68,12 @@ module.exports = {domString, clearDom};
 
 const tmdb = require('./tmdb');
 const firebaseApi = require('./firebaseApi');
+const dom = require('./dom');
 
 const pressEnter = () => {
 	$(document).keypress((e) => {
 		if (e.key === 'Enter') {
-			let searchText = $('#searchBar').val(); console.log(searchText);
+			let searchText = $('#searchBar').val();
 			let query = searchText.replace(/\s/g,"%20");
 			tmdb.searchMovies(query);
 		}
@@ -93,6 +91,13 @@ const myLinks = () => {
 			$('#input-search').addClass('hide');
 			$('#myMovies').removeClass('hide');
 			$('#authScreen').addClass('hide');
+			firebaseApi.getMovieList().then((results) => {
+				console.log("results", results);
+				dom.clearDom('myMovies');
+				dom.domString(results, tmdb.getImgConfig, 'myMovies');
+			}).catch((err) => { 
+				console.log("error in getMoviesList()", err);
+			});
 		} else if (idLink === 'auth-link') {
 			$('#input-search').addClass('hide');
 			$('#myMovies').addClass('hide');
@@ -113,7 +118,7 @@ const googleAuth = () => {
 
 
 module.exports = {pressEnter, myLinks, googleAuth};
-},{"./firebaseApi":4,"./tmdb":6}],4:[function(require,module,exports){
+},{"./dom":2,"./firebaseApi":4,"./tmdb":6}],4:[function(require,module,exports){
 "use strict";
 
 let firebaseKey = "";
@@ -137,11 +142,28 @@ const setKey = (key) => {
     });
   };
 
-module.exports = {setKey, authenticateGoogle};
+  const getMovieList = () => {
+  	let movies = [];
+  	return new Promise((resolve, reject) => {
+  		$.ajax(`${firebaseKey.databaseURL}/mvies.json?orderBy="uid"&equalTo="${userUid}"`).then((fbMovies) => {
+  			if (fbMovies != null) {
+	  			Object.keys(fbMovies).forEach((key) => {
+	  				fbMovies[key].id = key;
+	  				movies.push(fbMovies[key]);
+  				});
+	  		}
+  			resolve(fbMovies);
+  		}).catch((err) => {
+  			reject(err);
+  		});
+  	});
+  };
+
+
+
+module.exports = {setKey, authenticateGoogle, getMovieList};
 },{}],5:[function(require,module,exports){
 "use strict";
-
-let dom = require('./dom');
 
 // let singleMovie = {
 // 		adult:false,
@@ -171,7 +193,7 @@ events.googleAuth();
 events.pressEnter();
 
 
-},{"./apiKeys":1,"./dom":2,"./events":3}],6:[function(require,module,exports){
+},{"./apiKeys":1,"./events":3}],6:[function(require,module,exports){
 "use strict";
 
 const dom = require('./dom');
@@ -226,9 +248,13 @@ const setKey = (apiKey) => {
 };
 
 const showResults = (movieArray) => {
-	dom.clearDom();
-	dom.domString(movieArray, imgConfig);
+	dom.clearDom('movies');
+	dom.domString(movieArray, imgConfig, 'movies');
 };
 
-module.exports = {setKey, searchMovies};
+const getImgConfig = () => {
+	return imgConfig;
+};
+
+module.exports = {setKey, searchMovies, getImgConfig};
 },{"./dom":2}]},{},[5]);
