@@ -4,7 +4,7 @@
 
 const domString = (movieArray, imgConfig) => {
 	let domStrang = "";
-	console.log(movieArray);
+	// console.log(movieArray);
 	for (let i = 0; i < movieArray.length; i++) {
 		if (i % 3 === 0) {
 			domStrang += `<div class="row">`;

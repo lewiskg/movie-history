@@ -16,15 +16,15 @@ const myLinks = () => {
 	$(document).on('click', function(e) {
 		let idLink = e.target.id;
 		if(idLink === 'search-link') {
-			$('#search').removeClass('hide');
+			$('#input-search').removeClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').addClass('hide');
 		} else if(idLink ==='mymovies-link') {
-			$('#search').addClass('hide');
+			$('#input-search').addClass('hide');
 			$('#myMovies').removeClass('hide');
 			$('#authScreen').addClass('hide');
 		} else if (idLink === 'auth-link') {
-			$('#search').addClass('hide');
+			$('#input-search').addClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').removeClass('hide');
 		}

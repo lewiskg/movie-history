@@ -37,6 +37,7 @@ const getConfig = () => {
 };
 
 const searchMovies = (query) => {
+	// console.log("firebase apps?", firebase.apps);
 	searchTMDB(query).then((data) => {
 		showResults(data);
 	}).catch((error) => {

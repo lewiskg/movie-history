@@ -2,6 +2,7 @@
 "use strict";
 
 const tmdb = require('./tmdb');
+const firebaseApi = require('./firebaseApi');
 
 const apiKeys = () => {
 
@@ -17,20 +18,23 @@ const apiKeys = () => {
 const retrieveKeys = () => {
 	apiKeys().then((results) => {
 		tmdb.setKey(results.tmdb.apiKey);
+		firebaseApi.setKey(results.firebaseKeys);
+		firebase.initializeApp(results.firebaseKeys);
+		// console.log("firebase apps?", firebase.apps);
 	}).catch((error) => {
 		console.log("error in retrieve keys", error);
 	});
 };
 
 module.exports = {retrieveKeys};
-},{"./tmdb":5}],2:[function(require,module,exports){
+},{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
 
 
 const domString = (movieArray, imgConfig) => {
 	let domStrang = "";
-	console.log(movieArray);
+	// console.log(movieArray);
 	for (let i = 0; i < movieArray.length; i++) {
 		if (i % 3 === 0) {
 			domStrang += `<div class="row">`;
@@ -83,15 +87,15 @@ const myLinks = () => {
 	$(document).on('click', function(e) {
 		let idLink = e.target.id;
 		if(idLink === 'search-link') {
-			$('#search').removeClass('hide');
+			$('#input-search').removeClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').addClass('hide');
 		} else if(idLink ==='mymovies-link') {
-			$('#search').addClass('hide');
+			$('#input-search').addClass('hide');
 			$('#myMovies').removeClass('hide');
 			$('#authScreen').addClass('hide');
 		} else if (idLink === 'auth-link') {
-			$('#search').addClass('hide');
+			$('#input-search').addClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').removeClass('hide');
 		}
@@ -99,7 +103,17 @@ const myLinks = () => {
 };
 
 module.exports = {pressEnter, myLinks};
-},{"./tmdb":5}],4:[function(require,module,exports){
+},{"./tmdb":6}],4:[function(require,module,exports){
+"use strict";
+
+let firebaseKey = "";
+
+const setKey = (key) => {
+	firebaseKey = key;
+};
+
+module.exports = {setKey};
+},{}],5:[function(require,module,exports){
 "use strict";
 
 let dom = require('./dom');
@@ -131,7 +145,7 @@ events.myLinks();
 events.pressEnter();
 
 
-},{"./apiKeys":1,"./dom":2,"./events":3}],5:[function(require,module,exports){
+},{"./apiKeys":1,"./dom":2,"./events":3}],6:[function(require,module,exports){
 "use strict";
 
 const dom = require('./dom');
@@ -171,6 +185,7 @@ const getConfig = () => {
 };
 
 const searchMovies = (query) => {
+	// console.log("firebase apps?", firebase.apps);
 	searchTMDB(query).then((data) => {
 		showResults(data);
 	}).catch((error) => {
@@ -190,4 +205,4 @@ const showResults = (movieArray) => {
 };
 
 module.exports = {setKey, searchMovies};
-},{"./dom":2}]},{},[4]);
+},{"./dom":2}]},{},[5]);
