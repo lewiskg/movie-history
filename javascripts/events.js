@@ -30,15 +30,19 @@ const myLinks = () => {
 			$('#input-search').removeClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').addClass('hide');
+			$('#movies').removeClass('hide');
 		} else if(idLink ==='mymovies-link') {
 			$('#input-search').addClass('hide');
 			$('#myMovies').removeClass('hide');
 			$('#authScreen').addClass('hide');
+			$('#movies').addClass('hide');
 			getMahMovies();
 		} else if (idLink === 'auth-link') {
 			$('#input-search').addClass('hide');
 			$('#myMovies').addClass('hide');
 			$('#authScreen').removeClass('hide');
+			$('#movies').addClass('hide');
+
 		}
 	});
 };
