@@ -5,7 +5,6 @@ const tmdb = require('./tmdb');
 const firebaseApi = require('./firebaseApi');
 
 const apiKeys = () => {
-
 	return new Promise((resolve, reject) => {
 		$.ajax('./db/apiKeys.json').done((data) => {
 			resolve(data.apiKeys);
@@ -30,7 +29,7 @@ module.exports = {retrieveKeys};
 },{"./firebaseApi":4,"./tmdb":6}],2:[function(require,module,exports){
 "use strict";
 
-const domString = (movieArray, imgConfig, divName, search) => {
+const domString = (movieArray, imgConfig, divName, search) => { console.log('search',search);
 	let domStrang = "";
 	// console.log('movieArray', movieArray);
 		for (let i = 0; i < movieArray.length; i++) {
@@ -67,10 +66,8 @@ const printToDom = (strang, divName) => {
 
 };
 
-const clearDom = (divName) => { 
-	// $("#movies").empty("");
-	// $("#searchBar").val("");
-	$(`#${divName}`).empty();
+const clearDom = (divName) => {
+	$(`#${divName}`).empty("");
 };
 
 module.exports = {domString, clearDom};
@@ -94,7 +91,7 @@ const pressEnter = () => {
 const getMahMovies = () => {
 	firebaseApi.getMovieList().then((results) =>{
 		dom.clearDom('moviesMine');
-		dom.domString(results, tmdb.getImgConfig(),'moviesMine');
+		dom.domString(results, tmdb.getImgConfig(),'moviesMine',false);
 	}).catch((err) =>{
 		console.log("error in getMovieList", err);
 	});
@@ -180,7 +177,6 @@ const deleteMovies = () => {
 		firebaseApi.deleteMovie(movieId).then((results) => {
 			console.log("results", results);
 			getMahMovies();
-
 		}).catch((error) => {
 			console.log("error in deleteMovies", error);
 		});
@@ -272,8 +268,6 @@ module.exports = {setKey, authenticateGoogle, getMovieList, saveMovie, deleteMov
 },{}],5:[function(require,module,exports){
 "use strict";
 
-let dom = require('./dom');
-
 // let singleMovie = {
 // 		adult:false,
 // 		backdrop_path:"/c2Ax8Rox5g6CneChwy1gmu4UbSb.jpg",
@@ -300,7 +294,7 @@ apiKeys.retrieveKeys();
 events.init();
 
 
-},{"./apiKeys":1,"./dom":2,"./events":3}],6:[function(require,module,exports){
+},{"./apiKeys":1,"./events":3}],6:[function(require,module,exports){
 "use strict";
 
 const dom = require('./dom');
@@ -354,12 +348,12 @@ const setKey = (apiKey) => {
 };
 
 const showResults = (movieArray) => {
-	dom.clearDom();
-	dom.domString(movieArray, imgConfig, 'movies');
+	dom.clearDom('movies');
+	dom.domString(movieArray, imgConfig, 'movies', true);
 };
 
-const getImgConfig = () => { console.log('in getImgConfig', imgConfig);
-  return imgConfig;
+const getImgConfig = () => {
+	return imgConfig;
 };
 
 module.exports = {setKey, searchMovies, getImgConfig};

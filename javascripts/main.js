@@ -1,7 +1,5 @@
 "use strict";
 
-let dom = require('./dom');
-
 // let singleMovie = {
 // 		adult:false,
 // 		backdrop_path:"/c2Ax8Rox5g6CneChwy1gmu4UbSb.jpg",

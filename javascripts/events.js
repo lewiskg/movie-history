@@ -17,7 +17,7 @@ const pressEnter = () => {
 const getMahMovies = () => {
 	firebaseApi.getMovieList().then((results) =>{
 		dom.clearDom('moviesMine');
-		dom.domString(results, tmdb.getImgConfig(),'moviesMine');
+		dom.domString(results, tmdb.getImgConfig(),'moviesMine',false);
 	}).catch((err) =>{
 		console.log("error in getMovieList", err);
 	});
@@ -103,7 +103,6 @@ const deleteMovies = () => {
 		firebaseApi.deleteMovie(movieId).then((results) => {
 			console.log("results", results);
 			getMahMovies();
-
 		}).catch((error) => {
 			console.log("error in deleteMovies", error);
 		});

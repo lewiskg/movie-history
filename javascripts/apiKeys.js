@@ -4,7 +4,6 @@ const tmdb = require('./tmdb');
 const firebaseApi = require('./firebaseApi');
 
 const apiKeys = () => {
-
 	return new Promise((resolve, reject) => {
 		$.ajax('./db/apiKeys.json').done((data) => {
 			resolve(data.apiKeys);
