@@ -30,7 +30,7 @@ const tmdbConfiguration = () => {
 const getConfig = () => {
   tmdbConfiguration().then((results) => {
     imgConfig = results;
-    console.log(imgConfig);
+    // console.log(imgConfig);
   }).catch((error) => {
     console.log("Error in getConfig", error);
   });
@@ -43,7 +43,6 @@ const searchMovies = (query) => {
 	}).catch((error) => {
 		console.log("error in search Movies", error);
 	});
-
 };
 
 const setKey = (apiKey) => {
@@ -53,7 +52,11 @@ const setKey = (apiKey) => {
 
 const showResults = (movieArray) => {
 	dom.clearDom();
-	dom.domString(movieArray, imgConfig);
+	dom.domString(movieArray, imgConfig, 'movies');
 };
 
-module.exports = {setKey, searchMovies};
+const getImgConfig = () => { console.log('in getImgConfig', imgConfig);
+  return imgConfig;
+};
+
+module.exports = {setKey, searchMovies, getImgConfig};
